@@ -6,9 +6,9 @@ import { ILoginUserResponse, IRefreshTokenResponse } from './auth.interface';
 import httpStatus from 'http-status';
 import { AuthService } from './auth.service';
 
-//generate login user refresh and access token
 const loginUser = catchAsync(async (req: Request, res: Response) => {
   const { ...loginData } = req.body;
+
   const result = await AuthService.loginUser(loginData);
   const { refreshToken, ...others } = result;
 

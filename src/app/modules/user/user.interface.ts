@@ -1,15 +1,15 @@
+//student.interface.ts
 import { Model } from 'mongoose';
 
 export type IUser = {
+  _id: string;
   role: 'user' | 'admin' | 'super_admin';
   name: string;
   email: string;
   password: string;
   phoneNumber: string;
-  address?: string;
+  address: string;
 };
-
-export type UserModel = Model<IUser, Record<string, unknown>>;
 
 // Put all user instance methods in this interface
 export type IUserMethods = {
@@ -22,3 +22,5 @@ export type IUserMethods = {
     savedPassword: string
   ): Promise<boolean>;
 };
+
+export type UserModel = Model<IUser, Record<string, unknown>, IUserMethods>;

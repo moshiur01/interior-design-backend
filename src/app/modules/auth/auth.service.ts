@@ -12,13 +12,13 @@ import { User } from '../user/user.model';
 
 //generate new user access and refresh token
 const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
-  const { phoneNumber, password } = payload;
+  const { email, password } = payload;
 
   //create User Instance
   const user = new User();
 
-  //check user
-  const isUserExist = await user.isUserExists(phoneNumber);
+  // Check user existence
+  const isUserExist = await user.isUserExists(email);
   if (!isUserExist) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User Does Not Exists');
   }
@@ -33,11 +33,13 @@ const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
 
   //create access token
   const { _id, role } = isUserExist;
+
   const accessToken = JwtHelpers.createToken(
     { _id, role },
     config.jwt.jwt_access_token as Secret,
     config.jwt.jwt_access_token_expires_in as string
   );
+
   // refresh token
   const refreshToken = JwtHelpers.createToken(
     { _id, role },
