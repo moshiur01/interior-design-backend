@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "E:\\P hero level 2\\Misson 03 Be a Backend Brainiac Mission\\Assignments\\Digital-Cow-Hut-Backend\\logs\\winston\\success\\.aac5e0992e6103fa2200a7e3522d21b39572d332-audit.json",
+    "files": [
+        {
+            "date": 1688415240736,
+            "name": "E:\\P hero level 2\\Misson 03 Be a Backend Brainiac Mission\\Assignments\\Digital-Cow-Hut-Backend\\logs\\winston\\success\\phu-2023-04-07-02-success.log",
+            "hash": "280e959b1ef6b63187010a75111a50a22b618b3edce06db7fef3868f91fd07d1"
+        }
+    ],
+    "hashType": "sha256"
+}
