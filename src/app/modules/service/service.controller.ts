@@ -37,6 +37,7 @@ const GetById = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
 const updateOneIntoDb = catchAsync(async (req: Request, res: Response) => {
   const result = await service.updateOneIntoDb(req.params.id, req.body);
 
@@ -47,6 +48,7 @@ const updateOneIntoDb = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
 const deleteOneFromDB = catchAsync(async (req: Request, res: Response) => {
   const result = await service.deleteOneFromDB(req.params.id);
 
