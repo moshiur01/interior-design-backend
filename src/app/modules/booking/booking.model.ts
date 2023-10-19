@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
 import { BookingModel, IBooking } from './booking,interface';
+import { bookingStatus } from './booking.constrain';
 
 export const bookingSchema = new Schema<IBooking, BookingModel>(
   {
@@ -26,6 +27,11 @@ export const bookingSchema = new Schema<IBooking, BookingModel>(
     },
     dateAndTime: {
       type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: bookingStatus,
       required: true,
     },
   },

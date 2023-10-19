@@ -4,4 +4,7 @@ export const bookingFilterableFields = [
   'userEmail',
   'userName',
   'serviceName',
+  'status',
 ];
+
+export const bookingStatus = ['pending', 'approved', 'delivered', 'canceled'];

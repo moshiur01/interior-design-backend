@@ -6,6 +6,7 @@ export type IBookingFilters = {
   userEmail?: string;
   userName?: string;
   serviceName?: string;
+  status?: string;
 };
 
 export type IBooking = {
@@ -16,6 +17,7 @@ export type IBooking = {
   price: string;
   userPlace: string;
   dateAndTime: string;
+  status: 'pending' | 'approved' | 'delivered' | 'canceled';
 };
 
 export type BookingModel = Model<IBooking, Record<string, unknown>>;
