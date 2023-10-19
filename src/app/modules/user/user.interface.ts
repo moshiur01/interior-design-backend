@@ -1,6 +1,11 @@
 //student.interface.ts
 import { Model } from 'mongoose';
 
+export type IUserFilters = {
+  searchTerm?: string;
+  email?: string;
+};
+
 export type IUser = {
   _id: string;
   role: 'user' | 'admin' | 'super_admin';

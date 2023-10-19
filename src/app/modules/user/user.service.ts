@@ -4,10 +4,15 @@ import httpStatus from 'http-status';
 import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
 import bcrypt from 'bcrypt';
-import { IUser } from './user.interface';
+import { IUser, IUserFilters } from './user.interface';
 import { User } from './user.model';
 import { JwtHelpers } from '../../../helpers/jwtHelper';
 import { Secret } from 'jsonwebtoken';
+import { IPaginationOptions } from '../../../interfaces/paginatioon';
+import { IGenericResponse } from '../../../interfaces/common';
+import { userSearchableFields } from './user.constrain';
+import { paginationHelper } from '../../../helpers/paginationHelpers';
+import { SortOrder } from 'mongoose';
 
 const createUser = async (userData: IUser): Promise<IUser | null> => {
   const result = await User.create(userData);
@@ -15,10 +20,62 @@ const createUser = async (userData: IUser): Promise<IUser | null> => {
 };
 
 //get all users
-const getAllUsers = async (): Promise<IUser[]> => {
-  const result = await User.find({});
+const getAllUsers = async (
+  filters: IUserFilters,
+  paginationOptions: IPaginationOptions
+): Promise<IGenericResponse<IUser[]>> => {
+  const { searchTerm, ...filtersData } = filters;
+  const andConditions = [];
 
-  return result;
+  //partial match => searching
+  if (searchTerm) {
+    andConditions.push({
+      $or: userSearchableFields.map(field => ({
+        [field]: {
+          $regex: searchTerm,
+          $options: 'i',
+        },
+      })),
+    });
+  }
+
+  // filtering => exact match
+  if (Object.keys(filtersData).length) {
+    andConditions.push({
+      $and: Object.entries(filtersData).map(([field, value]) => ({
+        [field]: value,
+      })),
+    });
+  }
+
+  //pagination term
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelper.calculatePagination(paginationOptions);
+
+  //sort condition
+  const sortConditions: { [key: string]: SortOrder } = {};
+  if (sortBy && sortOrder) {
+    sortConditions[sortBy] = sortOrder;
+  }
+
+  //cheek either the condition is empty or not
+  const whereConditions =
+    andConditions.length > 0 ? { $and: andConditions } : {};
+
+  const result = await User.find(whereConditions)
+    .sort(sortConditions)
+    .skip(skip)
+    .limit(limit);
+
+  const total = await User.countDocuments(whereConditions);
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  };
 };
 
 //get single user

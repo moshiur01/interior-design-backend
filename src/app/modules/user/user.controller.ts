@@ -4,6 +4,9 @@ import { UserService } from './user.service';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sentResponse';
 import { IUser } from './user.interface';
+import pick from '../../../shared/pick';
+import { userFilterableFields } from './user.constrain';
+import { paginationFields } from '../../../constants/pagination';
 
 //create  user
 const createUser = catchAsync(async (req: Request, res: Response) => {
@@ -22,13 +25,18 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
 
 //get all users
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserService.getAllUsers();
+  const filters = pick(req.query, userFilterableFields);
+
+  const paginationOptions = pick(req.query, paginationFields);
+
+  const result = await UserService.getAllUsers(filters, paginationOptions);
 
   sendResponse<IUser[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Users Retrieved Successfully',
-    data: result,
+    message: 'Users data Retrieved Successfully',
+    data: result.data,
+    meta: result.meta,
   });
 });
 
@@ -41,20 +49,6 @@ const getSingleUser = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'User retrieved Successfully',
-    data: result,
-  });
-});
-
-//get user info
-const getUserInfo = catchAsync(async (req: Request, res: Response) => {
-  const token = req.headers.authorization;
-
-  const result = await UserService.getUserInfo(token);
-
-  sendResponse<IUser>(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "User's information  retrieved Successfully",
     data: result,
   });
 });
@@ -105,6 +99,5 @@ export const UserController = {
   getSingleUser,
   updateUser,
   deleteUser,
-  getUserInfo,
   updateUserInfo,
 };
