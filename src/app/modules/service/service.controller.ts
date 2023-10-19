@@ -74,7 +74,7 @@ const insertReviewByUser = catchAsync(async (req: Request, res: Response) => {
 const deleteReviewByUser = catchAsync(async (req: Request, res: Response) => {
   const result = await service.deleteReviewByUser(
     req.params.id,
-    req.body,
+    req.body.reviewId,
     req.user
   );
 

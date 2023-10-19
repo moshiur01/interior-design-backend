@@ -29,7 +29,7 @@ const getAllFromDb = async (
       $or: bookingSearchableFields.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $paginationOptions: 'i',
+          $options: 'i',
         },
       })),
     });

@@ -1,9 +1,4 @@
-export const bookingSearchableFields = [
-  '_id',
-  'userEmail',
-  'userName',
-  'serviceName',
-];
+export const bookingSearchableFields = ['userEmail', 'userName', 'serviceName'];
 export const bookingFilterableFields = [
   'searchTerm',
   'userEmail',

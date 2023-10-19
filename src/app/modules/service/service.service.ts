@@ -37,16 +37,13 @@ const updateOneIntoDb = async (
     throw new ApiError(httpStatus.NOT_FOUND, 'Service is not Found');
   }
 
-  // Check if the payload contains the 'price' field and it's an array or not
   if (payload.price && Array.isArray(payload.price)) {
-    // Iterate over the payload array to update prices by position value
     payload.price.forEach(priceUpdate => {
       if (existingService.price[priceUpdate?.position]) {
-        // Update 'name' if found
         if (priceUpdate.name) {
           existingService.price[priceUpdate?.position].name = priceUpdate.name;
         }
-        // Update 'price' if found
+
         if (!isNaN(priceUpdate.price)) {
           existingService.price[priceUpdate?.position].price =
             priceUpdate.price;
@@ -99,19 +96,17 @@ const deleteReviewByUser = async (
   reviewId: string,
   user: any
 ): Promise<Partial<IService> | null> => {
-  const review = new mongoose.Types.ObjectId(reviewId);
+  // const review = new mongoose.Types.ObjectId(reviewId);
 
   const result = await Service.findByIdAndUpdate(
     serviceId,
     {
       $pull: {
-        userReviews: { userId: review },
+        userReviews: { _id: reviewId },
       },
     },
     { new: true }
   );
-
-  // Now, 'result' contains the updated document with the review removed
 
   return result;
 };
