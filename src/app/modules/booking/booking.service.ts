@@ -29,7 +29,7 @@ const getAllFromDb = async (
       $or: bookingSearchableFields.map(field => ({
         [field]: {
           $regex: searchTerm,
-          $options: 'i',
+          $paginationOptions: 'i',
         },
       })),
     });
@@ -85,18 +85,22 @@ const updateOneIntoDb = async (
   id: string,
   payload: Partial<IBooking>
 ): Promise<IBooking | null> => {
-  const isExists = Booking.findById({ _id: id });
+  const isExists = await Booking.findById({ _id: id });
+
+  console.log(isExists);
 
   if (!isExists) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Booking Data Not Found');
   }
-  const result = Booking.findOneAndUpdate({ _id: id }, payload, { new: true });
+  const result = await Booking.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  });
 
   return result;
 };
 
 const deleteOneFromDb = async (id: string): Promise<IBooking | null> => {
-  const isExists = Booking.findById({ _id: id });
+  const isExists = await Booking.findById({ _id: id });
 
   if (!isExists) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Booking Data Not Found');
