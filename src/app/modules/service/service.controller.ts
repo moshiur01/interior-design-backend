@@ -60,10 +60,38 @@ const deleteOneFromDB = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const insertReviewByUser = catchAsync(async (req: Request, res: Response) => {
+  const result = await service.insertReviewByUser(req.params.id, req.body);
+
+  sendResponse<Partial<IService>>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Review Added Successfully',
+    data: result,
+  });
+});
+
+const deleteReviewByUser = catchAsync(async (req: Request, res: Response) => {
+  const result = await service.deleteReviewByUser(
+    req.params.id,
+    req.body,
+    req.user
+  );
+
+  sendResponse<Partial<IService>>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Review Deleted Successfully',
+    data: result,
+  });
+});
+
 export const serviceController = {
   createService,
   getAllFromDB,
   GetById,
   updateOneIntoDb,
   deleteOneFromDB,
+  insertReviewByUser,
+  deleteReviewByUser,
 };

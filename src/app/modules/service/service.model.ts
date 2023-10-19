@@ -29,6 +29,18 @@ export const serviceSchema = new Schema<IService, ServiceModel>(
       required: true,
       _id: false,
     },
+    userReviews: {
+      type: [
+        {
+          userId: String,
+          userName: String,
+          userImg: String,
+          reviewBody: String,
+          rating: Number,
+        },
+      ],
+      timestamps: true,
+    },
   },
   {
     timestamps: true,
